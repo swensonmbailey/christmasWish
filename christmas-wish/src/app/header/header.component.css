@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@400;700&display=swap');
+
+.mountains-of-christmas-regular {
+    font-family: "Mountains of Christmas", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.christmas-bg-red {
+    background-color:#ff7878; 
+    box-shadow: 10px 10px 10px rgba(255,255,255, .5);
+}
+
+.christmas-bg-green {background-color: #74d680; 
+}
+
+.site-brand:hover {
+    cursor: pointer;
+    text-decoration: none;
+    text-shadow: 10px 10px 10px rgba(255,255,255, .5);
+    
+}
+.site-brand:focus{
+    text-decoration: none;
+}
+
+.link:hover{
+    cursor: pointer;
+    text-decoration: none;
+    text-shadow: 10px 10px 10px rgba(255,255,255, .5);
+}
+
+
