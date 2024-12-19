@@ -1,12 +1,15 @@
 const loginController = require('../controllers/login');
+const User = require('../models/user');
 
-function authenticate(req, res, next){
+
+
+async function authenticate(email){
+
     console.log('in auth');
-    // console.log(loginController.userSessions)
-    let sessionId = req.headers.cookie?.split('=')[1];
-    let userSession = loginController.userSessions[sessionId];
-    // console.log(userSession);
-    if(!userSession){
+
+    let query =  await User.findOne({email: email});
+
+    if(!query.isLoggedIn){
         return res.status(401).send('Not Logged In');
     }else{
         next();

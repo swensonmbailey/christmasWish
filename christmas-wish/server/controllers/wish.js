@@ -11,7 +11,7 @@ const getWishes = async (req, res, next ) =>  {
     let query;
     try {
         
-        query =  await Wish.find({email: auth.getUserEmail(req)});
+        query =  await Wish.find({email: 'swensonmbailey@gmail.com'});
 
         for(let i = 0; i < query.length; i++){
             let newWish = filterWish(query[i]);

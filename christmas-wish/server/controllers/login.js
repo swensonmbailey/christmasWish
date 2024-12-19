@@ -1,8 +1,9 @@
 const nodemailer = require('nodemailer');
 const uuidv4 = require('uuid').v4;
 const User = require('../models/user');
+const auth = require('../middleware/authenticate');
 
-var userSessions = {};
+
 
 const sendLoginCode = async (req, res, next ) =>  {
     //
@@ -19,13 +20,13 @@ const sendLoginCode = async (req, res, next ) =>  {
 
             await User.findOneAndUpdate({email: query.email}, {$set: {latestCode: code}}, { new: true }); 
     
-            // await sendCodeToEmail(query.email, query.firstName, code);
+            await sendCodeToEmail(query.email, query.firstName, code);
             
             res.status(200).send(JSON.stringify('Login code sent to email'));
         }
 
     } catch (err) {
-        console.log(`library error--> ${err}`);
+        console.log(`log in error--> ${err}`);
         res.status(400).send(`Could not send code. Please try again later.`);
     }
 };
@@ -46,33 +47,42 @@ const userLogin = async (req, res, next ) =>  {
             //set latestCode to null so that it can't be used a second time. If the code is entered incorrectly
             //the user will have to get another code send to their email. 
             //one attempt per code.
-            // await User.findOneAndUpdate({email: query.email}, {$set: {latestCode: null}}, { new: true });
+            await User.findOneAndUpdate({email: query.email}, {$set: {latestCode: null}}, { new: true });
 
             if(code === +body.code){
                 
-                const sessionId = uuidv4();
-                userSessions[sessionId] = {email: query.email};
+                await User.findOneAndUpdate({email: req.body.email}, {$set: {isLoggedIn: true}}, { new: true }); 
+                console.log('successful login');
+              
 
-                console.log(userSessions[sessionId]);
-                res.set('Set-Cookie', `session=${sessionId}`);
-                res.send('success');
+                res.status(200).send(JSON.stringify('Login successful.'));
 
             }else{
-                res.status(401).send(JSON.stringify('Incorrect security code. Have another code sent to your email.'));
+                res.status(401).send('Incorrect security code. Have another code sent to your email.');
             }
             
             
         }
 
     } catch (err) {
-        console.log(`library error--> ${err}`);
+        console.log(`log in error--> ${err}`);
         res.status(400).send(`Could not login. Please try again later.`);
     }
 };
 
-const userLogOut = (req, res, next) => {
-    res.set('Set-Cookie', 'session=, expires=Thu, 01 Jan 1970 00:00:00 GMT');
-    res.status(200).send('Log Out successful.');
+const userLogOut = async (req, res, next) => {
+
+    try{
+        await User.findOneAndUpdate({email: req.params.email}, {$set: {isLoggedIn: false}}, { new: true }); 
+        console.log('successful logout');
+              
+        res.status(200).send('Log Out successful.');
+    }catch (err){
+        console.log(`log in error--> ${err}`);
+        res.status(400).send(`Could not log out. Please try again later.`);
+    }
+
+    
 }
 
 function generateRandomCode() {
@@ -109,9 +119,9 @@ async function sendCodeToEmail(email, firstName, code){
       });
 }
 
+
 module.exports = {
     sendLoginCode,
     userLogin,
-    userLogOut,
-    userSessions
+    userLogOut
 };

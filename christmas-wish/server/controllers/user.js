@@ -1,7 +1,28 @@
 const User = require('../models/user');
 const loginController = require('../controllers/login');
 
+const getUser = async (req, res, next ) =>  {
+    console.log("in getUser");
+    let params = req.params;
+    try {
 
+        //see if user email is connected to an existing user
+        let query = await User.findOne({email: params.email });
+
+        let filteredUser = filterUser(query);
+            
+            res.status(200).send(JSON.stringify(filteredUser));
+        
+
+        
+
+    } catch (err) {
+        console.log(`user error--> ${err}`);
+        res.status(400).send(`Could not fetch user. Please try again later.`);
+    }
+
+
+}
 
 const createUser = async (req, res, next ) =>  {
     //
@@ -12,7 +33,6 @@ const createUser = async (req, res, next ) =>  {
         //see if user email is connected to an existing user
         let query = await User.findOne({email: body.email });
         if(!query){
-            let code = loginController.generateRandomCode();
 
         
         
@@ -21,13 +41,10 @@ const createUser = async (req, res, next ) =>  {
                 email: body.email,
                 firstName: body.firstName,
                 lastName: body.lastName,
-                latestCode: code
-                
+                latestCode: null
             })
-
-            await loginController.sendCodeToEmail(body.email, body.firstName, code);
             
-            res.status(200).send(JSON.stringify('User Created. Login code sent to email'));
+            res.status(200).send(JSON.stringify('User Created.'));
         }else{
             res.status(401).send(JSON.stringify('This email is already attached to an existing user. Try logging in.'));
         }
@@ -42,48 +59,47 @@ const createUser = async (req, res, next ) =>  {
 
 
 
-// const putContact = async (req, res, next ) =>  {
-//     //will be used as a findmany to find the books in the use's library
-//     console.log("in getContacts");
-//     // Execute query 
-//     let body = req.body;
-//     try {
+const updateUser = async (req, res, next ) =>  {
+    //will be used as a findmany to find the books in the use's library
+    console.log("in updateUser");
+    // Execute query 
+    let body = req.body;
+    try {
         
-//         let updatedDoc =  { 
-//             name: body.name,
-//             email: body.email,
-//             phone: body.phone,
-//             imageUrl: body.imageUrl,
-//             group: body.group
-//         }
+        let updatedData = {
+            
+            email: body.email,
+            firstName: body.firstName,
+            lastName: body.lastName  
+        };
         
 
-//         await conMod.findOneAndUpdate({id: req.params.id}, {$set: updatedDoc}, { new: true }); 
+        await User.findOneAndUpdate({email: req.params.email}, {$set: updatedData}, { new: true }); 
         
-//         res.status(200).send(JSON.stringify('Contact updated!'));
+        res.status(200).send(JSON.stringify('User updated!'));
 
-//     } catch (err) {
-//         console.log(`library error--> ${err}`);
-//         res.status(400).send(`Could not update Contact.`);
-//     }
-// };
+    } catch (err) {
+        console.log(`user error--> ${err}`);
+        res.status(400).send(`Could not update user.`);
+    }
+};
 
 
-// const deleteContact = async (req, res, next ) =>  {
-//     //will be used as a findmany to find the books in the use's library
-//     console.log("in deleteContacts");
-//     // Execute query 
-//     try {
+const deleteUser = async (req, res, next ) =>  {
     
-//         await conMod.deleteOne({id: req.params.id.toString()});
+    console.log("in deleteUser");
+    // Execute query 
+    try {
+    
+        await User.deleteOne({email: req.params.email});
 
-//         res.status(200).send(JSON.stringify('Contact Deleted!'));
+        res.status(200).send(JSON.stringify('User Deleted!'));
 
-//     } catch (err) {
-//         console.log(`library error--> ${err}`);
-//         res.status(400).send(`Could not delete Contact.`);
-//     }
-// };
+    } catch (err) {
+        console.log(`User error--> ${err}`);
+        res.status(400).send(`Could not delete User.`);
+    }
+};
 
 // async function populateGroup(group){
 //     console.log("in populateGroup");
@@ -96,7 +112,22 @@ const createUser = async (req, res, next ) =>  {
 //     return group;
 // }
 
+function filterUser(user){
+    console.log('in filterUser');
+    console.log(user);
+    let filterUser = {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email
+    };
+
+    return filterUser;
+
+}
 
 module.exports = {
-    createUser
+    createUser,
+    getUser,
+    updateUser,
+    deleteUser
 };

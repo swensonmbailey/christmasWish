@@ -3,7 +3,7 @@ const auth = require('../middleware/authenticate');
 
 
 routes.use('/user', require('./user'));
-routes.use('/wish', auth.authenticate, require('./wish'));
+// routes.use('/wish', require('./wish'));
 routes.use('/login', require('./login'));
 
 routes.use(

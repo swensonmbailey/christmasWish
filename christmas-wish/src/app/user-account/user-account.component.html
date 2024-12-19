@@ -1,0 +1,27 @@
+<div class="panel panel-default">
+    <div class="panel-heading christmas-bg-red" style="color: white;">
+        
+        <div class="row">
+            <div class="col-xs-6"><h3>Account Info:</h3></div>
+            <div class="col-xs-6">
+                <button class="btn btn-primary" style="margin-right: 5px;" (click)="onUpdate()">Update</button>
+                <button class="btn btn-danger" (click)="onDelete()">Delete</button>
+            </div>
+            
+        </div>
+
+    
+    </div>
+    <div class="panel-body">
+
+        <ul style="list-style-type: none;">
+            <li>
+                Name: {{userData.firstName}} {{userData.lastName}}
+            </li>
+            <li>
+                Email: {{userData.email}}
+            </li>
+        </ul>
+      
+    </div>
+  </div>

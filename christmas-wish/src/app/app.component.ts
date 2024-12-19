@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { BackEndService } from './back-end.service';
 
 @Component({
   selector: 'wish-root',
@@ -7,4 +8,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'christmas-wish';
+  constructor(private backEnd: BackEndService){}
 }

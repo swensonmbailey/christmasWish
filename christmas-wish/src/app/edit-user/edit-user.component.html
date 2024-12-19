@@ -1,0 +1,80 @@
+<div class="panel panel-default">
+    <div class="panel-heading christmas-bg-red" style="color: white;">
+        <h3>Update Account Info:</h3>
+    </div>
+    <div class="panel-body">
+      <form id="login-form" (ngSubmit)="onSubmit(f)" #f="ngForm">
+  
+  
+        <div class="row">
+          <div class="col-sm-12 form-group">
+            <label for="firstName">First Name</label>
+            <input
+              type="text"
+              id="firstName"
+              class="form-control required"
+              
+              max="50"
+              ngModel
+              name="firstName"
+              #firstName="ngModel"
+              required>
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="col-sm-12 form-group">
+            <label for="lastName">Last Name:</label>
+            <input
+              type="text"
+              id="lastName"
+              class="form-control required"
+              
+              max="50"
+              ngModel
+              name="lastName"
+              #lastName="ngModel"
+              required>
+          </div>
+        </div>
+  
+  
+  
+        <div class="row">
+          <div class="col-sm-12 form-group">
+            <label for="email">Email:</label>
+            <input
+              type="text"
+              id="email"
+              class="form-control required"
+              size="120"
+              max="255"
+              ngModel
+              name="email"
+              #email="ngModel"
+              required
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+          </div>
+        </div>
+  
+  
+        <div class="alert alert-danger"
+        *ngIf="(firstName.invalid && firstName.touched) || (lastName.invalid && lastName.touched) || (email.invalid && email.touched)">
+            Both first and last name are required. As well as a valid email.
+        </div>
+        <div class="row">
+          <div class="col-xs-6 btn-toolbar">
+            <button class="btn btn-success" type="submit"
+            style="border-color: black;"
+            [disabled]="f.invalid">Update Account</button>
+            <button class="btn btn-primary" type="button" (click)="onCancel()">Cancel</button>
+          </div>
+          
+        </div>
+  
+        
+  
+      </form>
+    </div>
+  </div>
+  

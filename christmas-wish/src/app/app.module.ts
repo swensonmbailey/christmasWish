@@ -11,6 +11,14 @@ import { WishListComponent } from './wishes/wish-list/wish-list.component';
 import { WishItemComponent } from './wishes/wish-list/wish-item/wish-item.component';
 import { HomeComponent } from './home/home.component';
 import { DropdownDirective } from './header/dropdown.directive';
+import { LoginComponent } from './login/login.component';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { SendCodeComponent } from './send-code/send-code.component';
+import { CreateUserComponent } from './create-user/create-user.component';
+import { BackEndService } from './back-end.service';
+import { EditUserComponent } from './edit-user/edit-user.component';
+import { UserAccountComponent } from './user-account/user-account.component';
 
 @NgModule({
   declarations: [
@@ -22,11 +30,18 @@ import { DropdownDirective } from './header/dropdown.directive';
     WishListComponent,
     WishItemComponent,
     HomeComponent,
-    DropdownDirective
+    DropdownDirective,
+    LoginComponent,
+    SendCodeComponent,
+    CreateUserComponent,
+    EditUserComponent,
+    UserAccountComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

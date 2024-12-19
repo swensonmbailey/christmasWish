@@ -1,3 +1,4 @@
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,23 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit{
 
+  constructor(private http: HttpClient){}
+
   ngOnInit(): void {
-    fetch("localhost:3000/wish",
-      {
-          method: "POST",
-          body: JSON
-          .stringify
-          ({
-            userId: 1,
-            title: "Demo Todo Data",
-            completed: false,
-          }),
-          headers: {
-            "Content-type": "application/json",
-          },
-        })
-          .then((response) => response.json())
-          .then((json) => console.log(json));
+    this.http.get<any>('http://localhost:3000/wish')
+    .subscribe(
+      (response: any) => {
+        console.log(response);
+      }
+    );
   }
 
 }
